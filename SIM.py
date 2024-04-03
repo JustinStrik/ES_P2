@@ -4,8 +4,6 @@
 
 import sys
 import re
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Format of the Original Binaries
 # 000 Original Binary (32 bits)
