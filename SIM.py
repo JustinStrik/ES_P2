@@ -37,12 +37,18 @@ def get_and_sort_binaries():
             sorted_binaries.append(binary[0])
 
 def to_5_bit_binary(num):
+    if num < 0:
+        return format(num, '05b')
     return format(num, '05b')
 
 def to_3_bit_binary(num):
+    if num < 0:
+        return format(num, '03b')
     return format(num, '03b')
 
 def to_dict_binary(num):
+    if num < 0:
+        return format(num, '04b')
     return format(num, '04b')
 
 def get_bitmask(input_binary, dict_binary, mismatch_index):
@@ -168,6 +174,7 @@ def compression():
             output += '111' + to_dict_binary(dictionary.index(binary)) + '\n'
             prev_binary = binary
             continue
+    
         num_mismatches, dict_index = check_num_mismatches(binary)
         dict_binary = to_dict_binary(dict_index)
         mismatch_index = get_misatch_index(binary, dictionary[dict_index])
