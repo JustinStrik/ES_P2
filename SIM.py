@@ -1,7 +1,3 @@
-# take in a file called original.txt
-# it has strings of 32 bit binaries
-# create an array that ranks the binaries from most common to least
-
 import sys
 import re
 
@@ -354,7 +350,7 @@ def decompression():
 
 
 
-with open('test.txt', 'r') as file:
+with open('original.txt', 'r') as file:
     reference_output = file.read()
     # remove newlines from the entire output
     reference_output = re.sub(r'\n', '', reference_output)
@@ -362,7 +358,6 @@ with open('test.txt', 'r') as file:
 if __name__ == '__main__':
     # get reference output from compressed.txt
     # if arg is 1, compress
-    # input = input('Enter 1 for compression, 2 for decompression: ')
 
     if sys.argv[1] == '1':
         compression()
@@ -387,12 +382,9 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == '2':
         decompression()
+
         with open('dout.txt', 'w') as file:
+            output = re.sub(r'\n', '', output)
             # newlines every 32 characters
             output = re.sub(r'(.{32})', r'\1\n', output)
             file.write(output)
-
-    # with open('compressed.txt', 'w') as file:
-    #     file.write(output)
-    # print('Compression Complete')
-    # print('Compressed file saved as compressed.txt')
