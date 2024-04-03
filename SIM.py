@@ -5,26 +5,6 @@
 import sys
 import re
 
-# Format of the Original Binaries
-# 000 Original Binary (32 bits)
-# Format of the Run Length Encoding (RLE)
-# 001 Run Length Encoding (3 bits)
-# Format of bitmask-based compression – starting location is counted from left/MSB
-# 010 Starting Location (5 bits) Bitmask (4 bits) Dictionary Index (4 bits)
-# Please note that a bitmask location should be the first mismatch point from the left. In other words, the
-# leftmost bit of the 4-bit bitmask pattern should be always ‘1’.
-# Format of the 1-bit Mismatch – mismatch location is counted from left/MSB
-# 011 Mismatch Location (5 bits) Dictionary Index (4 bits)
-# 2
-# Format of the 2-bit consecutive mismatches – starting location is counted from left/MSB
-# 100 Starting Location (5 bits) Dictionary Index (4 bits)
-# Format of the 4-bit consecutive mismatches – starting location is counted from left/MSB
-# 101 Starting Location (5 bits) Dictionary Index (4 bits)
-# Format of the 2-bit mismatches anywhere – Mismatch locations (ML) are counted from left/MSB
-# 110 1st ML from left (5 bits) 2nd ML from left (5 bits) Dictionary Index (4 bits)
-# Format of the Direct Matching
-# 111 Dictionary Index (4 bits)
-
 dictionary = []
 sorted_binaries = []
 data = []
@@ -260,6 +240,14 @@ def decompression():
 
             op = compressed_data[i:i+3]
             i += 3
+            if (i >= 668):
+                print('here')
+
+            # if on last line, check if the rest are 0s to terminate
+            if len(compressed_data) - i < 32:
+                # are the rest 0s?, then break
+                if compressed_data[i:] == '0' * (len(compressed_data) - i):
+                    break
 
             # original binary
             if op == '000':
@@ -366,7 +354,6 @@ def decompression():
 
 
 
-
 with open('test.txt', 'r') as file:
     reference_output = file.read()
     # remove newlines from the entire output
@@ -377,30 +364,28 @@ if __name__ == '__main__':
     # if arg is 1, compress
     # input = input('Enter 1 for compression, 2 for decompression: ')
 
-    # if len(sys.argv) == 1:
-    if sys.argv[1] == '1':
-    # if input == '1':
-        compression()
-        # write to output file
-        # remove newlines from the entire output
-        output = re.sub(r'\n', '', output)
-        # insert newline every 32 characters
-        output = re.sub(r'(.{32})', r'\1\n', output)
+    # if sys.argv[1] == '1':
+    #     compression()
+    #     # write to output file
+    #     # remove newlines from the entire output
+    #     output = re.sub(r'\n', '', output)
+    #     # insert newline every 32 characters
+    #     output = re.sub(r'(.{32})', r'\1\n', output)
 
-        # pad the last line with 0s, check distance from last newline
-        last_newline = output.rfind('\n')
-        for i in range(33 - (len(output) - last_newline)):
-            output += '0'
+    #     # pad the last line with 0s, check distance from last newline
+    #     last_newline = output.rfind('\n')
+    #     for i in range(33 - (len(output) - last_newline)):
+    #         output += '0'
 
-        output += '\nxxxx\n'
-        # add dictionary to the end of the file
-        for binary in dictionary:
-            output += binary + '\n'
+    #     output += '\nxxxx\n'
+    #     # add dictionary to the end of the file
+    #     for binary in dictionary:
+    #         output += binary + '\n'
 
-        with open('cout.txt', 'w') as file:
-            file.write(output)
+    #     with open('cout.txt', 'w') as file:
+    #         file.write(output)
 
-    elif sys.argv[1] == '2':
+    # elif sys.argv[1] == '2':
     # elif input == '2':
         decompression()
         with open('dout.txt', 'w') as file:
