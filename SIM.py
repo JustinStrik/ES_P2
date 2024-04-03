@@ -364,29 +364,28 @@ if __name__ == '__main__':
     # if arg is 1, compress
     # input = input('Enter 1 for compression, 2 for decompression: ')
 
-    # if sys.argv[1] == '1':
-    #     compression()
-    #     # write to output file
-    #     # remove newlines from the entire output
-    #     output = re.sub(r'\n', '', output)
-    #     # insert newline every 32 characters
-    #     output = re.sub(r'(.{32})', r'\1\n', output)
+    if sys.argv[1] == '1':
+        compression()
+        # write to output file
+        # remove newlines from the entire output
+        output = re.sub(r'\n', '', output)
+        # insert newline every 32 characters
+        output = re.sub(r'(.{32})', r'\1\n', output)
 
-    #     # pad the last line with 0s, check distance from last newline
-    #     last_newline = output.rfind('\n')
-    #     for i in range(33 - (len(output) - last_newline)):
-    #         output += '0'
+        # pad the last line with 0s, check distance from last newline
+        last_newline = output.rfind('\n')
+        for i in range(33 - (len(output) - last_newline)):
+            output += '0'
 
-    #     output += '\nxxxx\n'
-    #     # add dictionary to the end of the file
-    #     for binary in dictionary:
-    #         output += binary + '\n'
+        output += '\nxxxx\n'
+        # add dictionary to the end of the file
+        for binary in dictionary:
+            output += binary + '\n'
 
-    #     with open('cout.txt', 'w') as file:
-    #         file.write(output)
+        with open('cout.txt', 'w') as file:
+            file.write(output)
 
-    # elif sys.argv[1] == '2':
-    # elif input == '2':
+    elif sys.argv[1] == '2':
         decompression()
         with open('dout.txt', 'w') as file:
             # newlines every 32 characters
