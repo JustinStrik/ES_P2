@@ -78,6 +78,7 @@ def check_num_mismatches(binary):
 
     return least_mismatches, least_mismatches_index
 
+# debugging purposes
 def check_against_reference():
     global output, reference_output
     # remove newlines from the entire output
@@ -142,11 +143,12 @@ def compression():
     # i is for debugging purposes
     for binary, i in zip(data, range(len(data))):
 
-        if not check_against_reference():
-            # say what i is, binary, and the output
-            print('error at i:', i - 1)
-            print('binary:', binary)
-            print('output:', output[output_length:])
+        # for debugging purposes
+        # if not check_against_reference():
+        #     # say what i is, binary, and the output
+        #     print('error at i:', i - 1)
+        #     print('binary:', binary)
+        #     print('output:', output[output_length:])
 
         output_length = len(output)
         # if i == 88:
@@ -236,12 +238,10 @@ def decompression():
 
         i = 0
         while i < len(compressed_data):
-            check_against_reference()
+            # check_against_reference() # debugging
 
             op = compressed_data[i:i+3]
             i += 3
-            if (i >= 668):
-                print('here')
 
             # if on last line, check if the rest are 0s to terminate
             if len(compressed_data) - i < 32:
