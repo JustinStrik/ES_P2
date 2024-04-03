@@ -1,3 +1,4 @@
+# On my honor, I have neither given nor received unauthorized aid on this assignment
 import sys
 import re
 
@@ -137,7 +138,10 @@ def compression():
     # only retain the first 16 binaries
     global dictionary, output, data
     get_and_sort_binaries()
-    dictionary = sorted_binaries[:16]
+    if len(sorted_binaries) > 16:
+        dictionary = sorted_binaries[:16]
+    else:
+        dictionary = sorted_binaries
 
     prev_binary = ''
     RLE = 0
