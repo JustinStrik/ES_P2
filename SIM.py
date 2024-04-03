@@ -290,7 +290,7 @@ def decompression():
                 dict_binary = dictionary[dict_index]
                 binary_output = list(dict_binary)
                 binary_output[mismatch_index] = '1' if binary_output[mismatch_index] == '0' else '0'
-                binary_output
+                binary_output = ''.join(binary_output)
                 output += binary_output + '\n'
                 continue
             # 2-bit consecutive mismatches
@@ -308,6 +308,8 @@ def decompression():
                 continue
             # 4-bit consecutive mismatches
             elif op == '101':
+                # possible error if there is a compression error
+                # where there is a 4 bit mismatch val that is more than 11100 (29) since it'd go over 32
                 start = int(compressed_data[i:i+5], 2)
                 i += 5
                 dict_index = int(compressed_data[i:i+4], 2)
