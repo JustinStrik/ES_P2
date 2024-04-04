@@ -62,6 +62,11 @@ def get_bitmask(input_binary, dict_binary, mismatch_index):
 
     return bitmask
 
+def able_to_bitmask(input_binary, dict_binary):
+    first_mismatch = get_misatch_index(input_binary, dict_binary)
+    last_mismatch = get_last_mismatch_index(input_binary, dict_binary)
+    return last_mismatch - first_mismatch <= 4
+
 def check_num_mismatches(binary):
     least_mismatches = 32
     least_mismatches_index = 0
@@ -111,7 +116,7 @@ def find_lowest_dict_that_can_bitmask(binary):
         for j in range(32):
             if binary[j] != dict_binary[j]:
                 count += 1
-        if count > 1 and count < 5:
+        if count > 1 and count < 5 and able_to_bitmask(binary, dict_binary):
             last = get_last_mismatch_index(binary, dict_binary)
             first = get_misatch_index(binary, dict_binary)
             if last - first < 4:
@@ -211,15 +216,20 @@ def compression():
             if not separate:
                 # 4 bit consecutive mismatches
                 output += '101' + mismatch_index_binary + dict_binary
-            new_dict_index = find_lowest_dict_that_can_bitmask(binary)
 
-            if new_dict_index != dict_index:
-                dict_index = new_dict_index
-                dict_binary = to_dict_binary(dict_index)
-                mismatch_index = get_misatch_index(binary, dictionary[dict_index])
-    
-            bitmask = get_bitmask(binary, dictionary[dict_index], mismatch_index)
-            output += '101' + mismatch_index_binary + bitmask + dict_binary
+            ideal_output = reference_output[output_length:output_length + 32]
+            if able_to_bitmask(binary, dictionary[dict_index]):
+                new_dict_index = find_lowest_dict_that_can_bitmask(binary)
+
+                if new_dict_index != dict_index:
+                    dict_index = new_dict_index
+                    dict_binary = to_dict_binary(dict_index)
+                    mismatch_index = get_misatch_index(binary, dictionary[dict_index])
+        
+                bitmask = get_bitmask(binary, dictionary[dict_index], mismatch_index)
+                output += '101' + mismatch_index_binary + bitmask + dict_binary
+            else: # 3 o r 4mismatches but no binary
+                output += '000' + binary
         else:
             output += '000' + binary
 
