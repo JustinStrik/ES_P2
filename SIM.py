@@ -162,7 +162,7 @@ def compression():
         #     print('output:', output[output_length:])
 
         output_length = len(output)
-        # if i == 88:
+        # if i == 19:
         #     print('here')        
 
         if binary == prev_binary and not just_RLE:
@@ -225,9 +225,10 @@ def compression():
                     dict_index = new_dict_index
                     dict_binary = to_dict_binary(dict_index)
                     mismatch_index = get_misatch_index(binary, dictionary[dict_index])
-        
+                    mismatch_index_binary = to_5_bit_binary(mismatch_index)
+
                 bitmask = get_bitmask(binary, dictionary[dict_index], mismatch_index)
-                output += '101' + mismatch_index_binary + bitmask + dict_binary
+                output += '010' + mismatch_index_binary + bitmask + dict_binary
             else: # 3 o r 4mismatches but no binary
                 output += '000' + binary
         else:
@@ -392,7 +393,11 @@ if __name__ == '__main__':
 
         # pad the last line with 0s, check distance from last newline
         last_newline = output.rfind('\n')
-        for i in range(33 - (len(output) - last_newline)):
+        how_many_zeros = 33 - (len(output) - last_newline)
+
+        if how_many_zeros == 32:
+            how_many_zeros = 0
+        for i in range(how_many_zeros):
             output += '0'
 
         output += '\nxxxx\n'
